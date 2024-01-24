@@ -8,68 +8,32 @@ function Player(name, symbol) {
 
 function Gameboard() {
   const board = [
-    ['_', '_', '_'],
-    ['_', '_', '_'],
-    ['_', '_', '_']
+    [' ', ' ', ' '],
+    [' ', ' ', ' '],
+    [' ', ' ', ' ']
   ];
 
   const getBoard = () => board;
 
-  const setCell = (row, col, value) => {
-    if (row >= 0 && row < 3 && col >= 0 && col < 3 && (board[row][col] == '_' || board[row][col] === 'X' || board[row][col] === '0')) {
-      board[row][col] = value;
-      return true;
-    } else {
-      console.log('false');
-      return false;
-      
-    }
+  // Updating the DOM cubes based on what's in the data model (the board array).
+  const connectDataToDom = () => {
+    const allCubes = document.querySelectorAll('.cube');
+    let rowIterator = 0;
+    let columnIterator = 0;
+
+    allCubes.forEach(cube => {
+      cube.textContent = board[rowIterator][columnIterator];
+      columnIterator++;
+
+      if (columnIterator === 3) {
+        rowIterator++;
+        columnIterator = 0;
+      }
+    })
   };
 
-  const printBoardVertically = () => {
-  console.log(`${board[0]}\n${board[1]}\n${board[2]}`);
-  };
-
-  const checkForWin = () => {
-    // HORIZONTAL ROW CHECK
-    if ((board[0][0] == 'X' && board[0][1] == 'X' && board[0][2] == 'X') || (board[0][0] == '0' && board[0][1] == '0' && board[0][2] == '0')) {
-      return true;
-    }
-    else if ((board[1][0] == 'X' && board[1][1] == 'X' && board[1][2] == 'X') || (board[1][0] == '0' && board[1][1] == '0' && board[1][2] == '0')) {
-      return true;
-    }
-    else if ((board[2][0] == 'X' && board[2][1] == 'X' && board[2][2] == 'X') || (board[2][0] == '0' && board[2][1] == '0' && board[2][2] == '0')) {
-      return true;
-    }
-
-    // VERTICAL ROW CHECK
-    else if ((board[0][0] == 'X' && board[1][0] == 'X' && board[2][0] == 'X') || (board[0][0] == '0' && board[1][0] == '0' && board[2][0] == '0')) {
-      return true;
-    }
-    else if ((board[0][1] == 'X' && board[1][1] == 'X' && board[2][1] == 'X') || (board[0][1] == '0' && board[1][1] == '0' && board[2][1] == '0')) {
-      return true;
-    }
-    else if ((board[0][2] == 'X' && board[1][2] == 'X' && board[2][2] == 'X') || (board[0][2] == '0' && board[1][2] == '0' && board[2][2] == '0')) {
-      return true;
-    }
-
-    // DIAGONAL ROW CHECK
-    else if ((board[0][0] == 'X' && board[1][1] == 'X' && board[2][2] == 'X') || (board[0][0] == '0' && board[1][1] == '0' && board[2][2] == '0')) {
-      return true;
-    }
-    else if ((board[0][2] == 'X' && board[1][1] == 'X' && board[2][0] == 'X') || (board[0][2] == '0' && board[1][1] == '0' && board[2][0] == '0')) {
-      return true;
-    }
-
-    else {
-      return false;
-    }
-
-  };
-
-  return { getBoard, setCell, printBoardVertically, checkForWin };
-
-}
+  return { getBoard, connectDataToDom };
+};
 
 function Game() {
 
@@ -86,19 +50,28 @@ function Game() {
     else {
       currentPLayer = playerOne;
     }
-  }
+  };
+
 
   const playTurn = () => {
-    let rowAnswer = parseInt(prompt('Please choose which row'));
-    let colAnswer = parseInt(prompt('Please choose which column'));
+    const allSquares = document.querySelectorAll('.cube');
+    allSquares.forEach(cube => {
+      cube.addEventListener('click', function(event) {
+        let row = event.target.dataset.row;
+        let column = event.target.dataset.column;
+        
+        // Updating the board data model.
+        gameBoard.getBoard()[row][column] = currentPLayer.symbol;
 
-    gameBoard.setCell(rowAnswer, colAnswer, currentPLayer.symbol);
-
-    console.log(currentPLayer);
-    switchPlayer();
-
-    gameBoard.printBoardVertically();
-};
+        // Updating the DOM-UI.
+        gameBoard.connectDataToDom();
+        
+        switchPlayer();
+        checkWinner();
+  
+      })
+    })
+  };
 
   const checkWinner = () => {
     // FIRST GROUP
@@ -154,20 +127,22 @@ function Game() {
     else if (gameBoard.getBoard()[0][2] == '0' && gameBoard.getBoard()[1][1] == '0' && gameBoard.getBoard()[2][0] == '0') {
       console.log(`${playerTwo.name} has won!`);
     }
-  }
+  };
 
-
-  while (gameBoard.checkForWin() == false) {
-    playTurn();
-    console.log(gameBoard.checkForWin());
-
-    if (gameBoard.checkForWin() == true) {
-      checkWinner();
-    }
-    
-  }
-
+  return { playTurn };
   
-}
+};
 
-Game();
+let gameOne = Game();
+gameOne.playTurn();
+
+
+
+// Zaglaviv na toa kako da go spojam data modelot (boardot) so Dom-ot. Na 28-ma linija imam funkcija so koja se updejtuva DOM-ot spored data-arrayot, ama fintata e so ne znam kako da go updejtuvam data-arrayot spored klikovi na DOM-ot.
+
+// Na primer mozam da napravam funkcija u koja sto ke go updatuvam domot spored klikovi na particular .cubes, ama pa kako spored toa da go updejtnam data-arrayot.
+
+// Druga opcija mi e da nemam uopste data-array, samo so klikovi da go updejtuvam DOM-ot, i da gi smenam checkForWin() i checkWinner() funkciite, da proveruvaat direktno od DOM-ot sto ima vo .cubes elementite, so .textContent.
+
+
+//!! OVA MI IZGLEA NA LEGIT RESENIE! Mozam da probam da go updatnam data-arrayot so klik na elementite od DOMOT, na primer mozam da im dadam na .cube html elementite po 2 data keys, u koja kolona i u koj row se, pa spored toa na board[data-key][data-key] da im stavam simbol.

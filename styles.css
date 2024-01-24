@@ -1,0 +1,27 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cube-container {
+  font-size: 40px;
+  background-color: black;
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+  grid-template-rows: 200px  200px  200px;
+}
+
+.cube {
+  display: flex;
+  margin: 10px;
+  background-color: blanchedalmond;
+  align-items: center;
+  justify-content: center;
+}
