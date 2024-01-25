@@ -1,9 +1,8 @@
 
 
 function Player(name, symbol) {
-  
   return { name, symbol }
-}
+};
 
 
 function Gameboard() {
@@ -37,18 +36,34 @@ function Gameboard() {
 
 function Game() {
 
-  const gameBoard = Gameboard();
-  const playerOne = Player('dare', 'X');
-  const playerTwo = Player('Miki', '0');
-  let currentPLayer = playerOne;
+  const firstPlayer = document.querySelector('#first-player-name');
+  const secondPLayer = document.querySelector('#second-player-name');
 
+  const gameBoard = Gameboard();
+  const playerOne = Player('', 'X');
+  const playerTwo = Player('', '0');
+  const whosTurn = document.querySelector('.turn');
+  let currentPLayer = playerOne;
+  const startGameButton = document.querySelector('.start');
+  const restartGameButton = document.querySelector('.restart');
+
+
+  startGameButton.addEventListener('click', function() {
+    checkPLayerInputs();
+  })
+
+  const printWhosTurnItIs = () => {
+    whosTurn.textContent = `It's ${currentPLayer.name}'s turn!`;
+  };
   
   const switchPlayer = () => {
     if (currentPLayer == playerOne) {
       currentPLayer = playerTwo;
+      printWhosTurnItIs();
     }
     else {
       currentPLayer = playerOne;
+      printWhosTurnItIs();
     }
   };
 
@@ -57,18 +72,26 @@ function Game() {
     const allSquares = document.querySelectorAll('.cube');
     allSquares.forEach(cube => {
       cube.addEventListener('click', function(event) {
-        let row = event.target.dataset.row;
-        let column = event.target.dataset.column;
-        
-        // Updating the board data model.
-        gameBoard.getBoard()[row][column] = currentPLayer.symbol;
 
-        // Updating the DOM-UI.
-        gameBoard.connectDataToDom();
+        if (checkBeforeGameStarts() === true) {
+          console.log('whaaat');
+          let row = event.target.dataset.row;
+          let column = event.target.dataset.column;
+          whosTurn.textContent = `It's ${currentPLayer.name}'s turn!`;
+          
+          // Updating the board data model.
+          gameBoard.getBoard()[row][column] = currentPLayer.symbol;
+
+          // Updating the DOM-UI.
+          gameBoard.connectDataToDom();
+          
+          switchPlayer();
+          checkWinner();
+        }
+        else  {
+          console.log('wHAAAAAAAAt');
+        }
         
-        switchPlayer();
-        checkWinner();
-  
       })
     })
   };
@@ -129,8 +152,64 @@ function Game() {
     }
   };
 
-  return { playTurn };
+  const checkPLayerInputs = () => {
+    let first = firstPlayer.value;
+    let second = secondPLayer.value;
+    
+
+    if (first === "" || first === "Please enter your name.") {
+      firstPlayer.value = "Please enter your name.";
+      firstPlayer.style.backgroundColor = `rgb(255, 125, 125)`;
+    }
+    
+    if (second === "" || second === "Please enter your name.") {
+      secondPLayer.value = "Please enter your name.";
+      secondPLayer.style.backgroundColor = `rgb(255, 125, 125)`;
+    }
+
+    if (first && second) {
+      if (first !== "" && first !== "Please enter your name.") {
+        playerOne.name = firstPlayer.value;
+        console.log('kurac1');
+      }
   
+      if (second !== "" && second !== "Please enter your name.") {
+        playerTwo.name = secondPLayer.value;
+        console.log('kurac2');
+      }
+    }
+  };
+
+  const changeInputColor = () => {
+    firstPlayer.addEventListener('focus', function() {
+      if (firstPlayer.value === "Please enter your name.") {
+        firstPlayer.value = "";
+        firstPlayer.style.backgroundColor = `rgb(255, 255, 255)`;
+      }
+    })
+
+    secondPLayer.addEventListener('focus', function() {
+      if (secondPLayer.value === "Please enter your name.") {
+        secondPLayer.value = "";
+        secondPLayer.style.backgroundColor = `rgb(255, 255, 255)`;
+      }
+    })
+  };
+  
+  const checkBeforeGameStarts = () => {
+    if (playerOne.name !== "" && playerTwo.name !== "") {
+      console.log('wtf');
+      return true;
+    }
+    else {
+      console.log('wtf2');
+      return false;
+    }
+  };
+
+  changeInputColor();
+
+  return { playTurn };
 };
 
 let gameOne = Game();
@@ -146,3 +225,7 @@ gameOne.playTurn();
 
 
 //!! OVA MI IZGLEA NA LEGIT RESENIE! Mozam da probam da go updatnam data-arrayot so klik na elementite od DOMOT, na primer mozam da im dadam na .cube html elementite po 2 data keys, u koja kolona i u koj row se, pa spored toa na board[data-key][data-key] da im stavam simbol.
+
+
+
+// MI OSTANA USTE DA NAPRAAM CHECK ZA DALI POSTOJAT 2 ta player NAMES. Odnosno player.names da moraat da imaat nekakvo ime vo niv, da NE smeat da se prazni, 2 te i toa! Za da moze da se dozvoli da se stava input vo polinjata.
