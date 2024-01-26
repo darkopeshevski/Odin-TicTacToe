@@ -39,6 +39,7 @@ function Game() {
   const firstPlayer = document.querySelector('#first-player-name');
   const secondPLayer = document.querySelector('#second-player-name');
 
+  let cubeFilledCounter = 0;
   const gameBoard = Gameboard();
   const playerOne = Player('', 'X');
   const playerTwo = Player('', '0');
@@ -48,9 +49,14 @@ function Game() {
   const restartGameButton = document.querySelector('.restart');
 
 
+  // Clicking the Start Game button and performing the starting logic.
   startGameButton.addEventListener('click', function() {
+    deleteBoard();
     checkPLayerInputs();
-  })
+    if (checkBeforeGameStarts() === true) {
+    startGameButton.disabled = true;
+    }
+  });
 
   const printWhosTurnItIs = () => {
     whosTurn.textContent = `It's ${currentPLayer.name}'s turn!`;
@@ -68,30 +74,41 @@ function Game() {
   };
 
 
+  // The main logic ic called and organized here.
   const playTurn = () => {
     const allSquares = document.querySelectorAll('.cube');
     allSquares.forEach(cube => {
       cube.addEventListener('click', function(event) {
 
         if (checkBeforeGameStarts() === true) {
-          console.log('whaaat');
           let row = event.target.dataset.row;
           let column = event.target.dataset.column;
           whosTurn.textContent = `It's ${currentPLayer.name}'s turn!`;
           
-          // Updating the board data model.
-          gameBoard.getBoard()[row][column] = currentPLayer.symbol;
+          // Updating the board data model, but checking first if the field is empty.
+          if (gameBoard.getBoard()[row][column] !== playerOne.symbol && gameBoard.getBoard()[row][column] !== playerTwo.symbol) {
+            console.log('Ya bech');
+            gameBoard.getBoard()[row][column] = currentPLayer.symbol;
 
-          // Updating the DOM-UI.
-          gameBoard.connectDataToDom();
-          
-          switchPlayer();
-          checkWinner();
+            // Updating the DOM-UI.
+            gameBoard.connectDataToDom();
+            
+            switchPlayer();
+            checkWinner();
+            
+            
+            cubeFilledCounter++;
+            console.log(cubeFilledCounter);
+            checkTieGame();
+            endGame();
+          }
+          else {
+            console.log('pusi ga brate');
+          }
         }
         else  {
-          console.log('wHAAAAAAAAt');
+          whosTurn.textContent = `Please enter the players' names, and press "Start game"!`;
         }
-        
       })
     })
   };
@@ -99,56 +116,56 @@ function Game() {
   const checkWinner = () => {
     // FIRST GROUP
     if (gameBoard.getBoard()[0][0] == 'X' && gameBoard.getBoard()[0][1] == 'X' && gameBoard.getBoard()[0][2] == 'X') {
-      console.log(`${playerOne.name} has won!`);
+      whosTurn.textContent = `${playerOne.name} has won!`;
     }
     else if (gameBoard.getBoard()[0][0] == '0' && gameBoard.getBoard()[0][1] == '0' && gameBoard.getBoard()[0][2] == '0') {
-      console.log(`${playerTwo.name} has won!`);
+      whosTurn.textContent = `${playerTwo.name} has won!`;
     }
     else if (gameBoard.getBoard()[1][0] == 'X' && gameBoard.getBoard()[1][1] == 'X' && gameBoard.getBoard()[1][2] == 'X') {
-      console.log(`${playerOne.name} has won!`);
+      whosTurn.textContent = `${playerOne.name} has won!`;
     }
     else if (gameBoard.getBoard()[1][0] == '0' && gameBoard.getBoard()[1][1] == '0' && gameBoard.getBoard()[1][2] == '0') {
-      console.log(`${playerTwo.name} has won!`);
+      whosTurn.textContent = `${playerTwo.name} has won!`;
     }
     else if (gameBoard.getBoard()[0][2] == 'X' && gameBoard.getBoard()[1][2] == 'X' && gameBoard.getBoard()[2][2] == 'X') {
-      console.log(`${playerOne.name} has won!`);
+      whosTurn.textContent = `${playerOne.name} has won!`;
     }
     else if (gameBoard.getBoard()[2][0] == '0' && gameBoard.getBoard()[2][1] == '0' && gameBoard.getBoard()[2][2] == '0') {
-      console.log(`${playerTwo.name} has won!`);
+      whosTurn.textContent = `${playerTwo.name} has won!`;
     }
     
     // SECOND GROUP
     else if (gameBoard.getBoard()[0][0] == 'X' && gameBoard.getBoard()[1][0] == 'X' && gameBoard.getBoard()[2][0] == 'X') {
-      console.log(`${playerOne.name} has won!`);
+      whosTurn.textContent = `${playerOne.name} has won!`;
     }
     else if (gameBoard.getBoard()[0][0] == '0' && gameBoard.getBoard()[1][0] == '0' && gameBoard.getBoard()[2][0] == '0') {
-      console.log(`${playerTwo.name} has won!`);
+      whosTurn.textContent = `${playerTwo.name} has won!`;
     }
     else if (gameBoard.getBoard()[0][1] == 'X' && gameBoard.getBoard()[1][1] == 'X' && gameBoard.getBoard()[2][1] == 'X') {
-      console.log(`${playerOne.name} has won!`);
+      whosTurn.textContent = `${playerOne.name} has won!`;
     }
     else if (gameBoard.getBoard()[0][1] == '0' && gameBoard.getBoard()[1][1] == '0' && gameBoard.getBoard()[2][1] == '0') {
-      console.log(`${playerTwo.name} has won!`);
+      whosTurn.textContent = `${playerTwo.name} has won!`;
     }
     else if (gameBoard.getBoard()[0][2] == 'X' && gameBoard.getBoard()[1][2] == 'X' && gameBoard.getBoard()[2][2] == 'X') {
-      console.log(`${playerOne.name} has won!`);
+      whosTurn.textContent = `${playerOne.name} has won!`;
     }
     else if  (gameBoard.getBoard()[0][2] == '0' && gameBoard.getBoard()[1][2] == '0' && gameBoard.getBoard()[2][2] == '0') {
-      console.log(`${playerTwo.name} has won!`);
+      whosTurn.textContent = `${playerTwo.name} has won!`;
     }
 
     // THIRD GROUP
     else if (gameBoard.getBoard()[0][0] == 'X' && gameBoard.getBoard()[1][1] == 'X' && gameBoard.getBoard()[2][2] == 'X') {
-      console.log(`${playerOne.name} has won!`);
+      whosTurn.textContent = `${playerOne.name} has won!`;
     }
     else if (gameBoard.getBoard()[0][0] == '0' && gameBoard.getBoard()[1][1] == '0' && gameBoard.getBoard()[2][2] == '0') {
-      console.log(`${playerTwo.name} has won!`);
+      whosTurn.textContent = `${playerTwo.name} has won!`;
     }
     else if (gameBoard.getBoard()[0][2] == 'X' && gameBoard.getBoard()[1][1] == 'X' && gameBoard.getBoard()[2][0] == 'X') {
-      console.log(`${playerOne.name} has won!`);
+      whosTurn.textContent = `${playerOne.name} has won!`;
     }
     else if (gameBoard.getBoard()[0][2] == '0' && gameBoard.getBoard()[1][1] == '0' && gameBoard.getBoard()[2][0] == '0') {
-      console.log(`${playerTwo.name} has won!`);
+      whosTurn.textContent = `${playerTwo.name} has won!`;
     }
   };
 
@@ -170,12 +187,10 @@ function Game() {
     if (first && second) {
       if (first !== "" && first !== "Please enter your name.") {
         playerOne.name = firstPlayer.value;
-        console.log('kurac1');
       }
   
       if (second !== "" && second !== "Please enter your name.") {
         playerTwo.name = secondPLayer.value;
-        console.log('kurac2');
       }
     }
   };
@@ -198,15 +213,52 @@ function Game() {
   
   const checkBeforeGameStarts = () => {
     if (playerOne.name !== "" && playerTwo.name !== "") {
-      console.log('wtf');
+      whosTurn.textContent = `It's ${playerOne.name}'s turn!`;
       return true;
     }
     else {
-      console.log('wtf2');
       return false;
     }
   };
 
+  const deleteBoard = () => {
+    for (let i = 0; i < gameBoard.getBoard().length; i++) {
+      for (let b = 0; b < gameBoard.getBoard()[i].length; b++) {
+        gameBoard.getBoard()[i][b] = "";
+      }
+    }
+    gameBoard.connectDataToDom();
+  };
+
+  const deleteInputfields = () => {
+    firstPlayer.value = "";
+    secondPLayer.value = "";
+  }
+
+  const endGame = () => {
+    if (whosTurn.textContent === `${playerOne.name} has won!` || whosTurn.textContent === `${playerTwo.name} has won!`) {
+      startGameButton.disabled = false;
+      deleteBoard();
+      playerOne.name = "";
+      playerTwo.name = "";
+      deleteInputfields();
+      cubeFilledCounter = 0;
+    }
+  };
+
+  // Checking for a tie match.
+  const checkTieGame = () => {
+    if (cubeFilledCounter === 9 && (whosTurn.textContent !== `${playerOne.name} has won!` || whosTurn.textContent !== `${playerTwo.name} has won!`)) {
+      whosTurn.textContent = "It is a tie match!";
+      deleteBoard();
+      playerOne.name = "";
+      playerTwo.name = "";
+      deleteInputfields();
+      cubeFilledCounter = 0;
+      startGameButton.disabled = false;
+    }
+  };
+  
   changeInputColor();
 
   return { playTurn };
@@ -229,3 +281,6 @@ gameOne.playTurn();
 
 
 // MI OSTANA USTE DA NAPRAAM CHECK ZA DALI POSTOJAT 2 ta player NAMES. Odnosno player.names da moraat da imaat nekakvo ime vo niv, da NE smeat da se prazni, 2 te i toa! Za da moze da se dozvoli da se stava input vo polinjata.
+
+
+// da napravam funkcija kade sto nema da moze da se stavi nov simbol vo zafateno pole!
