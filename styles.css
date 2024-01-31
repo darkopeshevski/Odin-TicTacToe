@@ -27,6 +27,9 @@ body {
 }
 
 .turn {
+  display: flex;
+  align-items: center;
+  height: 92px;
   width: 600px;
   margin-bottom: 40px;
   font-size: 2.5rem;
@@ -35,15 +38,25 @@ body {
 .start-restart {
   display: flex;
   gap: 30px;
-  margin-top: 320px;
 }
 
 .names {
-  height: 630px;
-  width: 300px;
+  visibility: hidden;
+  width: 525px;
   display: flex;
   flex-direction: column;
   gap: 50px;
+  align-items: center;
+}
+
+.results {
+  padding-top: 50px;
+  height: 260px;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  font-size: 50px;
 }
 
 label {

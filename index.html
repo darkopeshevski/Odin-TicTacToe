@@ -23,19 +23,24 @@
   </div>
   <div class="right-content">
     <div class="start-restart">
-      <button class="start">Start game</button>
+      <button class="new">New game</button>
       <button class="restart">Restart game</button>
     </div>
-    <div class="names">
+    <div class="results">
+      <div class="first-result">First Player:  </div>
+      <div class="second-result">Second Player: </div>
+    </div>
+    <dialog class="names">
       <div class="first-player">
-        <label for="first-player-name">First player:</label>
+        <label for="first-player-name">First player: X</label>
         <input type="text" name="first-player-name" id="first-player-name" required>
       </div> 
       <div class="second-player">
-        <label for="second-player-name">Second player:</label>
+        <label for="second-player-name">Second player: 0</label>
         <input type="text" name="second-player-name" id="second-player-name" required>
       </div>
-    </div>
+      <button class="start-game">Start Game</button>
+    </dialog>
   </div>
   
 
