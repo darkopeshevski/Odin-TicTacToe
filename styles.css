@@ -59,11 +59,11 @@ body {
 .results {
   padding-top: 50px;
   height: 260px;
-  width: 340px;
+  width: 650px;
   display: flex;
   flex-direction: column;
   gap: 50px;
-  font-size: 50px;
+  font-size: 63px;
 
   color: #FFCA27;
 }
@@ -80,7 +80,6 @@ input {
   width: 500px;
   height: 70px;
   border-radius: 20px;
-
   font-family: 'Single Day', cursive;
 }
 

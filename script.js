@@ -78,6 +78,7 @@ function Game() {
     inputNamesDiv.style.visibility = 'hidden';
     switcher = true;
     }
+    increaseFontSize();
   });
 
   restartGameButton.addEventListener('click', function() {
@@ -305,6 +306,12 @@ function Game() {
 
   // This function is called here because it is listening to the "focus" event all the time.
   changeInputColor();
+
+  const increaseFontSize = () => {
+    const results = document.querySelector('.results');
+    results.style.fontSize = '100px';
+    results.style.fontWeight = 'bold';
+  }
 
   return { playTurn };
 };
