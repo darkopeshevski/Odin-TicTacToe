@@ -39,7 +39,6 @@ function Game() {
   const firstPlayer = document.querySelector('#first-player-name');
   const secondPLayer = document.querySelector('#second-player-name');
 
-  let cubeFilledCounter = 0;
   const gameBoard = Gameboard();
   const playerOne = Player('', 'X', 0);
   const playerTwo = Player('', '0', 0);
@@ -50,6 +49,7 @@ function Game() {
   const startGameButton = document.querySelector('.start-game');
   let firstResult = document.querySelector('.first-result');
   let secondResult = document.querySelector('.second-result');
+  let cubeFilledCounter = 0;
 
   let currentPLayer = playerOne;
   let switcher;
@@ -74,7 +74,6 @@ function Game() {
     firstResult.textContent = `${playerOne.name} : ${playerOne.result}`;
     secondResult.textContent = `${playerTwo.name} : ${playerTwo.result}`;
     if (checkBeforeGameStarts() === true) {
-    newGameButton.disabled = true;
     inputNamesDiv.close();
     inputNamesDiv.style.visibility = 'hidden';
     switcher = true;
@@ -85,6 +84,7 @@ function Game() {
     deleteBoard();
     switcher = true;
     cubeFilledCounter = 0;
+    whosTurn.textContent = `It's ${currentPLayer.name}'s turn!`;
   });
 
   const printWhosTurnItIs = () => {
@@ -263,7 +263,6 @@ function Game() {
 
   const endGame = () => {
     if (whosTurn.textContent === `${playerOne.name} has won!` || whosTurn.textContent === `${playerTwo.name} has won!`) {
-      newGameButton.disabled = false;
       updateResults();
       cubeFilledCounter = 0;
       switcher = false;
@@ -272,10 +271,20 @@ function Game() {
 
   // Checking for a tie match.
   const checkTieGame = () => {
-    if (cubeFilledCounter === 9 && (whosTurn.textContent !== `${playerOne.name} has won!` || whosTurn.textContent !== `${playerTwo.name} has won!`)) {
-      whosTurn.textContent = "It is a tie match!";
+    console.log(whosTurn.textContent);
+    if (whosTurn.textContent !== `${playerOne.name} has won!` && whosTurn.textContent !== `${playerTwo.name} has won!`) {
+      console.log('TRUE');
+      if (cubeFilledCounter === 9 && (whosTurn.textContent !== `${playerOne.name} has won!` || whosTurn.textContent !== `${playerTwo.name} has won!`)) {
+        whosTurn.textContent = "It is a tie match!";
+        cubeFilledCounter = 0;
+        switcher = false;
+        console.log('KURAC');
+      }
+    }
+    else if (whosTurn.textContent === `${playerOne.name} has won!` || whosTurn.textContent === `${playerTwo.name} has won!`) {
       cubeFilledCounter = 0;
-      switcher = false;
+      console.log('jedi govna');
+      
     }
   };
 
