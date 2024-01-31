@@ -60,6 +60,9 @@ function Game() {
     
     inputNamesDiv.showModal();
     inputNamesDiv.style.visibility = 'visible';
+
+    playerOne.name = "";
+    playerTwo.name = "";
     deleteBoard();
     
   });
@@ -81,6 +84,7 @@ function Game() {
   restartGameButton.addEventListener('click', function() {
     deleteBoard();
     switcher = true;
+    cubeFilledCounter = 0;
   });
 
   const printWhosTurnItIs = () => {
@@ -226,14 +230,14 @@ function Game() {
     firstPlayer.addEventListener('focus', function() {
       if (firstPlayer.value === "Please enter your name.") {
         firstPlayer.value = "";
-        firstPlayer.style.backgroundColor = `rgb(255, 255, 255)`;
+        firstPlayer.style.backgroundColor = `rgb(255, 202, 39)`;
       }
     })
 
     secondPLayer.addEventListener('focus', function() {
       if (secondPLayer.value === "Please enter your name.") {
         secondPLayer.value = "";
-        secondPLayer.style.backgroundColor = `rgb(255, 255, 255)`;
+        secondPLayer.style.backgroundColor = `rgb(255, 202, 39)`;
       }
     })
   };
@@ -256,11 +260,6 @@ function Game() {
     }
     gameBoard.connectDataToDom();
   };
-
-  const deleteInputfields = () => {
-    firstPlayer.value = "";
-    secondPLayer.value = "";
-  }
 
   const endGame = () => {
     if (whosTurn.textContent === `${playerOne.name} has won!` || whosTurn.textContent === `${playerTwo.name} has won!`) {
